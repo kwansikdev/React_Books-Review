@@ -16,7 +16,7 @@ const StyledCol = styled(Col).attrs(() => ({
   span: 24
 }))``;
 
-const StyledTitle = styled.div`
+const StyledTitle = styled.h1`
   text-align: center;
   font-size: 40px;
   font-weight: bold;
@@ -24,7 +24,7 @@ const StyledTitle = styled.div`
   text-transform: uppercase;
 `;
 
-const StyledSubTitle = styled.div`
+const StyledSubTitle = styled.h2`
   text-align: center;
   font-size: 27px;
   font-weight: bold;
