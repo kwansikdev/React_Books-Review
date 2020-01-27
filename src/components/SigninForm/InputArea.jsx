@@ -61,6 +61,7 @@ const InputArea = props => {
       });
       console.log(response);
       setLoading(false);
+      localStorage.setItem("token", response.data.token);
       props.history.push("/");
     } catch (error) {
       console.log(error);

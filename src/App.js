@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
 import Home from "./pages/Home";
@@ -16,7 +16,18 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/signin" component={Signin} />
-          <Route path="/" component={Home} />
+          <Route
+            path="/"
+            render={props => {
+              const token = localStorage.getItem("token");
+              console.log(token);
+              if (token === null) {
+                return <Redirect to="/signin" />;
+              }
+              return <Home {...props} token={token} />;
+            }}
+            component={Home}
+          />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
