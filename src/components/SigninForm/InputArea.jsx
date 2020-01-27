@@ -49,7 +49,7 @@ const InputArea = props => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
-  const click = async () => {
+  const click = async ({ key }) => {
     const email = emailInput.current.state.value;
     const password = passwordInput.current.state.value;
 
@@ -59,12 +59,10 @@ const InputArea = props => {
         email,
         password
       });
-      console.log(response);
       setLoading(false);
       localStorage.setItem("token", response.data.token);
       props.history.push("/");
     } catch (error) {
-      console.log(error);
       setLoading(false);
       message.error(error.response.data.error);
     }

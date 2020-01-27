@@ -1,10 +1,12 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
+import Signout from "./pages/Signout";
 import NotFound from "./pages/NotFound";
+import AddBook from "./components/AddBook";
 
 import "./App.css";
 
@@ -15,19 +17,10 @@ function App() {
     <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
       <BrowserRouter>
         <Switch>
+          <Route path="/signout" component={Signout} />
           <Route path="/signin" component={Signin} />
-          <Route
-            path="/"
-            render={props => {
-              const token = localStorage.getItem("token");
-              console.log(token);
-              if (token === null) {
-                return <Redirect to="/signin" />;
-              }
-              return <Home {...props} token={token} />;
-            }}
-            component={Home}
-          />
+          <Route path="/addbook" component={AddBook} />
+          <Route path="/" component={Home} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
