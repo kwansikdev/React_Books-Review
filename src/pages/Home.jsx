@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -12,29 +12,32 @@ const Home = () => {
   const [books, setBooks] = useState([]);
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    axios
-      .get("https://api.marktube.tv/v1/book", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(res => {
-        console.log(res);
-        setBooks(res.data);
-      });
+  const getBooksList = useCallback(async () => {
+    const response = await axios.get("https://api.marktube.tv/v1/book", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    setBooks(response.data);
   }, [token]);
 
+  useEffect(() => {
+    getBooksList();
+  }, [getBooksList]);
+
   const removeBook = async id => {
-    const response = await axios.delete(
-      `https://api.marktube.tv/v1/book/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+    try {
+      const response = await axios.delete(
+        `https://api.marktube.tv/v1/book/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      }
-    );
-    console.log(id);
+      );
+
+      setBooks(books.filter(book => book.bookId !== id));
+    } catch (error) {}
   };
 
   return (
@@ -58,8 +61,7 @@ const Home = () => {
       </StyledHeader>
       <h1>HOME</h1>
       <section>
-        {/* <div>추가된 책이 없습니다. 책을 추가해주세요</div> */}
-        {books !== [] ? (
+        {books[0] ? (
           <ul>
             {books.map(book => (
               <li key={book.bookId}>

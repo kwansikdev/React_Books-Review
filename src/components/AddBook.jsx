@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import { Input, Button, message } from "antd";
+import { Input } from "antd";
 import withAuth from "../hocs/withAuth";
 
 const StyledHeader = styled.header``;
@@ -25,18 +25,12 @@ const AddBook = props => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
+            Authorization: `Bearer ${token}`
           }
         }
       );
+      props.history.push("/");
     } catch (error) {}
-    console.log(
-      "author: ",
-      authorRef.current.state.value,
-      ", title: ",
-      titleRef.current.state.value
-    );
   };
 
   return (
