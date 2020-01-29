@@ -4,44 +4,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import { Button, Input } from "antd";
-import { TiHomeOutline } from "react-icons/ti";
+
 import { FaSistrix, FaEraser, FaRegTrashAlt } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
-const StyledHeader = styled.header`
-  display: flex;
-  justify-content: space-between;
-  height: 70px;
-  /* padding: 0 25px; */
-
-  div {
-    display: inline-block;
-    text-align: center;
-    height: 70px;
-    padding: 10px 0;
-  }
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0;
-  }
-
-  button {
-    background: #28546a;
-    color: white;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    border-style: none;
-    font-weight: 500;
-    border: 2px solid white;
-
-    &:hover {
-      color: #28546a;
-      border: 2px solid #28546a;
-    }
-  }
-`;
+import Nav from "../components/Nav";
+import InputModal from "../components/InputModal";
 
 const Section = styled.section`
   position: relative;
@@ -54,7 +22,7 @@ const Section = styled.section`
     border-radius: 30px;
     padding: 20px;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
   }
 
   ul {
@@ -129,102 +97,19 @@ const Home = () => {
     );
   };
 
-  const opneAddBook = () => {
-    setStatus(!status);
-  };
-
-  const closeAddBook = () => {
-    setStatus(false);
-  };
-
-  //
-  const authorRef = createRef();
-  const titleRef = createRef();
-  const urlRef = createRef();
-  const messageRef = createRef();
-
-  const addBook = useCallback(async () => {
-    const author = authorRef.current.state.value;
-    const title = titleRef.current.state.value;
-    const url = urlRef.current.state.value;
-    const message = messageRef.current.state.value;
-
-    try {
-      const response = await axios.post(
-        "https://api.marktube.tv/v1/book",
-        {
-          title,
-          author
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      setStatus(false);
-    } catch (error) {}
-  }, [authorRef, messageRef, titleRef, token, urlRef]);
-
   useEffect(() => {
     getBooksList();
-  }, [addBook, getBooksList]);
+  }, [getBooksList, status]);
 
   return (
     <>
-      <StyledHeader>
-        <div>
-          <Button>
-            <Link to="/">
-              <TiHomeOutline />
-            </Link>
-          </Button>
-          <Button onClick={opneAddBook}>
-            {/* <Link to="/addbook">책 추가</Link> */}책 추가
-          </Button>
-        </div>
-        <div>
-          <h1>BOOKS' REVIEW</h1>
-        </div>
-        <div>
-          {token ? (
-            <Button>
-              <Link to="/signout">로그아웃</Link>
-            </Button>
-          ) : (
-            <Button>
-              <Link to="/signin">로그인</Link>
-            </Button>
-          )}
-        </div>
-      </StyledHeader>
+      <Nav token={token} status={status} setStatus={setStatus} />
       <h1>HOME</h1>
       <div>
         <Section>
-          {status ? (
-            <div className="add-book-modal">
-              <Button onClick={closeAddBook}>
-                <IoMdCloseCircleOutline />
-              </Button>
-              <label htmlFor="author">
-                저자:
-                <Input id="author" placeholder="" ref={authorRef} />
-              </label>
-              <label htmlFor="title">
-                제목:
-                <Input id="title" placeholder="" ref={titleRef} />
-              </label>
-              <label htmlFor="message">
-                메세지:
-                <Input id="message" placeholder="" ref={messageRef} />
-              </label>
-              <label htmlFor="url">
-                url:
-                <Input id="url" placeholder="" ref={urlRef} />
-              </label>
-              <Button onClick={addBook}>ADD</Button>
-            </div>
-          ) : null}
+          {status && (
+            <InputModal token={token} status={status} setStatus={setStatus} />
+          )}
           {token ? (
             books[0] ? (
               <Ul>
