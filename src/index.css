@@ -1,11 +1,10 @@
 body {
-  min-width: 500px;
+  /* min-width: 500px;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0 auto; */
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding: 0 25px;
 }
 
 code {

@@ -1,64 +1,39 @@
-import React, { useState, useEffect, useCallback, createRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
-import { Button, Input } from "antd";
-
-import { FaSistrix, FaEraser, FaRegTrashAlt } from "react-icons/fa";
-import { IoMdCloseCircleOutline } from "react-icons/io";
 
 import Nav from "../components/Nav";
-import InputModal from "../components/InputModal";
-
-const Section = styled.section`
-  position: relative;
-
-  .add-book-modal {
-    background: yellow;
-    width: 600px;
-    height: 600px;
-    border: 2px solid black;
-    border-radius: 30px;
-    padding: 20px;
-    position: fixed;
-    z-index: 2;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    /* li {
-      margin-bottom: 20px;
-      border-radius: 30px;
-      padding: 20px;
-      border: 1px solid #28546a;
-
-      & + & {
-      } */
-  }
-`;
+import { Layout, Menu, Icon, Button } from "antd";
+import { FaEraser, FaRegTrashAlt } from "react-icons/fa";
 
 const Ul = styled.ul`
-  /* list-style-type: none;
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: wrap;
 
   li {
-    border-radius: 1px solid #28546a;
-  } */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px 30px 20px 30px;
+    border-radius: 3rem;
+    outline: none;
+    border: none;
+    box-shadow: 0 0 2rem 0.15rem rgba(0, 0, 255, 0.1);
+    width: 300px;
+  }
 `;
 
-const Li = styled.li`
-  margin-top: 20px;
-  border-radius: 30px;
-  padding: 20px;
-  border: 1px solid #28546a;
-`;
-
-const Home = () => {
-  const [books, setBooks] = useState([]);
-  const [status, setStatus] = useState(false);
+const Homex = props => {
+  const { SubMenu } = Menu;
+  const { Content, Sider } = Layout;
   const token = localStorage.getItem("token");
+
+  const [books, setBooks] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const getBooksList = useCallback(async () => {
     const response = await axios.get("https://api.marktube.tv/v1/book", {
@@ -67,7 +42,22 @@ const Home = () => {
       }
     });
     setBooks(response.data);
+    console.log(response.data);
   }, [token]);
+
+  useEffect(() => {
+    getBooksList();
+  }, [getBooksList]);
+
+  const logout = () => {
+    axios.delete("https://api.marktube.tv/v1/me", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    props.history.push("/");
+    localStorage.removeItem("token");
+  };
 
   const removeBook = async id => {
     try {
@@ -79,64 +69,81 @@ const Home = () => {
           }
         }
       );
-
-      setBooks(books.filter(book => book.bookId !== id));
+      getBooksList();
     } catch (error) {}
   };
 
-  const reviseBook = async id => {
-    axios.patch(
-      // `https://api.marktube.tv/v1/book/${id}`,
-      {
-        // title,
-        // message,
-        // author,
-        // url,
-      },
-      { headers: `Bearer ${token}` }
-    );
-  };
-
-  useEffect(() => {
-    getBooksList();
-  }, [getBooksList, status]);
-
   return (
-    <>
-      <Nav token={token} status={status} setStatus={setStatus} />
-      <h1>HOME</h1>
-      <div>
-        <Section>
-          {status && (
-            <InputModal token={token} status={status} setStatus={setStatus} />
-          )}
-          {token ? (
-            books[0] ? (
-              <Ul>
-                {books.map(book => (
-                  <Li key={book.bookId}>
-                    <p>Book Id: {book.bookId} </p>
-                    <p>책 제목 : {book.title}</p>
-                    <p>저자 : {book.author}</p>
-                    <Button>
-                      <FaEraser onClick={() => reviseBook(book.bookId)} />
-                    </Button>
-                    <Button onClick={() => removeBook(book.bookId)}>
-                      <FaRegTrashAlt />
-                    </Button>
-                  </Li>
-                ))}
-              </Ul>
+    <Layout style={{ height: "100vh" }}>
+      <Nav
+        token={token}
+        logout={logout}
+        history={props.history}
+        visible={visible}
+        setVisible={setVisible}
+      />
+      <Layout>
+        <Sider width={200} style={{ background: "#fff" }}>
+          <Menu
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
+            style={{ height: "100%", borderRight: 0 }}
+          >
+            <SubMenu
+              key="sub1"
+              title={
+                <span>
+                  <Icon type="user" />
+                  User
+                </span>
+              }
+            >
+              <Menu.Item key="1">List</Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+        <Layout style={{ padding: "24px" }}>
+          <Content
+            style={{
+              background: "#fff",
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+              borderRadius: "30px",
+              overflowY: "auto"
+            }}
+          >
+            {token ? (
+              books[0] ? (
+                <Ul>
+                  {books.map(book => (
+                    <li key={book.bookId}>
+                      <p>Book Id: {book.bookId} </p>
+                      <p>책 제목 : {book.title}</p>
+                      <p>저자 : {book.author}</p>
+                      <Button>
+                        <FaEraser />
+                      </Button>
+                      <Button>
+                        <FaRegTrashAlt
+                          onClick={() => removeBook(book.bookId)}
+                        />
+                      </Button>
+                    </li>
+                  ))}
+                </Ul>
+              ) : (
+                <p> 추가된 책이 없습니다. 책을 추가해주세요</p>
+              )
             ) : (
-              <p> 추가된 책이 없습니다. 책을 추가해주세요</p>
-            )
-          ) : (
-            <p>추가한 책 목록을 보기위해서 로그인을 해주시기 바랍니다</p>
-          )}
-        </Section>
-      </div>
-    </>
+              <p>추가한 책 목록을 보기위해서 로그인을 해주시기 바랍니다</p>
+            )}
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   );
 };
 
-export default Home;
+export default Homex;

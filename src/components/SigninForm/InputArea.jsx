@@ -44,7 +44,7 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = props => {
+const InputArea = ({ history, setToken }) => {
   const [loading, setLoading] = useState(false);
   const emailInput = createRef();
   const passwordInput = createRef();
@@ -61,7 +61,8 @@ const InputArea = props => {
       });
       setLoading(false);
       localStorage.setItem("token", response.data.token);
-      props.history.push("/");
+      setToken(response.data.token);
+      history.push("/");
     } catch (error) {
       setLoading(false);
       message.error(error.response.data.error);

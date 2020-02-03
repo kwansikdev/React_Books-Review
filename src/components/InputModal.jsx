@@ -1,29 +1,24 @@
-import React, { createRef, useCallback } from "react";
+import React, { createRef, useCallback, useState } from "react";
 import axios from "axios";
 
 import styled from "styled-components";
-import { Button, Input } from "antd";
-import { IoMdCloseCircleOutline } from "react-icons/io";
+import { Input, Modal } from "antd";
 
-const ModalBg = styled.div`
-  position: absolute;
-  background: rgba(0, 0, 0, 0.4);
-  width: 100%;
-  height: calc(100vh - 135px);
-  z-index: 1;
+const Label = styled.label`
+  margin-bottom: 20px;
 `;
 
-const InputModal = ({ token, setStatus }) => {
+const InputModal = ({ token, visible, setVisible, history }) => {
   const authorRef = createRef();
   const titleRef = createRef();
-  const urlRef = createRef();
   const messageRef = createRef();
+  const urlRef = createRef();
 
   const addBook = useCallback(async () => {
     const author = authorRef.current.state.value;
     const title = titleRef.current.state.value;
-    const url = urlRef.current.state.value;
     const message = messageRef.current.state.value;
+    const url = urlRef.current.state.value;
 
     try {
       const response = await axios.post(
@@ -38,39 +33,39 @@ const InputModal = ({ token, setStatus }) => {
           }
         }
       );
-      setStatus(false);
+      setVisible(false);
     } catch (error) {}
-  }, [authorRef, messageRef, setStatus, titleRef, token, urlRef]);
+  }, [authorRef, titleRef, messageRef, urlRef, token, setVisible]);
 
-  const closeAddBook = () => {
-    setStatus(false);
+  const handleCancel = e => {
+    setVisible(false);
   };
 
   return (
     <>
-      <ModalBg></ModalBg>
-      <div className="add-book-modal">
-        <Button onClick={closeAddBook}>
-          <IoMdCloseCircleOutline />
-        </Button>
-        <label htmlFor="author">
-          저자:
-          <Input id="author" placeholder="" ref={authorRef} />
-        </label>
-        <label htmlFor="title">
-          제목:
-          <Input id="title" placeholder="" ref={titleRef} />
-        </label>
-        <label htmlFor="message">
-          메세지:
-          <Input id="message" placeholder="" ref={messageRef} />
-        </label>
-        <label htmlFor="url">
-          url:
-          <Input id="url" placeholder="" ref={urlRef} />
-        </label>
-        <Button onClick={addBook}>ADD</Button>
-      </div>
+      <Modal
+        title="Basic Modal"
+        visible={visible}
+        onOk={addBook}
+        onCancel={handleCancel}
+      >
+        <Label htmlFor="title">
+          TITLE
+          <Input ref={titleRef} id="title" placeholder="책 제목" />
+        </Label>
+        <Label htmlFor="author">
+          AUTHOR
+          <Input ref={authorRef} id="author" placeholder="저자" />
+        </Label>
+        <Label htmlFor="comment">
+          COMMENT
+          <Input ref={messageRef} id="comment" placeholder="COMMENT" />
+        </Label>
+        <Label htmlFor="url">
+          URL
+          <Input ref={urlRef} id="url" placeholder="URL" />
+        </Label>
+      </Modal>
     </>
   );
 };

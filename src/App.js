@@ -6,7 +6,6 @@ import Home from "./pages/Home";
 import Signin from "./pages/Signin";
 import Signout from "./pages/Signout";
 import NotFound from "./pages/NotFound";
-import AddBook from "./components/AddBook";
 
 import "./App.css";
 
@@ -19,7 +18,6 @@ function App() {
         <Switch>
           <Route path="/signout" component={Signout} />
           <Route path="/signin" component={Signin} />
-          <Route path="/addbook" component={AddBook} />
           <Route path="/" component={Home} />
           <Route component={NotFound} />
         </Switch>
