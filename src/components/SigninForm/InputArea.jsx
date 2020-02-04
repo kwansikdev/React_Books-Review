@@ -54,18 +54,17 @@ const InputArea = ({ history, setToken }) => {
     const password = passwordInput.current.state.value;
 
     try {
-      setLoading(true);
+      // setLoading(true);
       const response = await axios.post("https://api.marktube.tv/v1/me", {
         email,
         password
       });
-      setLoading(false);
       localStorage.setItem("token", response.data.token);
-      setToken(response.data.token);
+      // setToken(response.data.token);
       history.push("/");
+      // setLoading(false);
     } catch (error) {
-      setLoading(false);
-      message.error(error.response.data.error);
+      // setLoading(false);
     }
   };
 
@@ -85,9 +84,7 @@ const InputArea = ({ history, setToken }) => {
         </StyledLabel>
         <StyledPassword ref={passwordInput} />
       </StyledInput>
-      <InputButton loading={loading} onClick={click}>
-        SIGN IN
-      </InputButton>
+      <InputButton onClick={click}>SIGN IN</InputButton>
     </>
   );
 };

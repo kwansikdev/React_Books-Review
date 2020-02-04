@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import withAuth from "../hocs/withAuth";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -27,7 +28,7 @@ const Ul = styled.ul`
   }
 `;
 
-const Homex = props => {
+const Home = props => {
   const { SubMenu } = Menu;
   const { Content, Sider } = Layout;
   const token = localStorage.getItem("token");
@@ -146,4 +147,4 @@ const Homex = props => {
   );
 };
 
-export default Homex;
+export default withAuth(Home);
