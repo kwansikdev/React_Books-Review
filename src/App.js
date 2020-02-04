@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
+import Signout from "./pages/Signout";
 import NotFound from "./pages/NotFound";
 
 import "./App.css";
@@ -15,6 +16,7 @@ function App() {
     <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
       <BrowserRouter>
         <Switch>
+          <Route path="/signout" component={Signout} />
           <Route path="/signin" component={Signin} />
           <Route path="/" component={Home} />
           <Route component={NotFound} />

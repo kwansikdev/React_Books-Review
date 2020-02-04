@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, createRef } from "react";
+import { withRouter } from "react-router-dom";
+import axios from "axios";
+
 import styled from "styled-components";
-import { Input, Button } from "antd";
+import { Input, Button, message } from "antd";
 
 const StyledInput = styled.div`
   margin-bottom: 20px;
@@ -41,7 +44,30 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = props => {
+const InputArea = ({ history, setToken }) => {
+  const [loading, setLoading] = useState(false);
+  const emailInput = createRef();
+  const passwordInput = createRef();
+
+  const click = async ({ key }) => {
+    const email = emailInput.current.state.value;
+    const password = passwordInput.current.state.value;
+
+    try {
+      // setLoading(true);
+      const response = await axios.post("https://api.marktube.tv/v1/me", {
+        email,
+        password
+      });
+      localStorage.setItem("token", response.data.token);
+      // setToken(response.data.token);
+      history.push("/");
+      // setLoading(false);
+    } catch (error) {
+      // setLoading(false);
+    }
+  };
+
   return (
     <>
       <StyledInput>
@@ -49,18 +75,18 @@ const InputArea = props => {
           Email
           <StyledStar>*</StyledStar>
         </StyledLabel>
-        <StyledEmail />
+        <StyledEmail ref={emailInput} />
       </StyledInput>
       <StyledInput>
         <StyledLabel htmlFor="password">
           Password
           <StyledStar>*</StyledStar>
         </StyledLabel>
-        <StyledPassword />
+        <StyledPassword ref={passwordInput} />
       </StyledInput>
-      <InputButton>SIGN IN</InputButton>
+      <InputButton onClick={click}>SIGN IN</InputButton>
     </>
   );
 };
 
-export default InputArea;
+export default withRouter(InputArea);
