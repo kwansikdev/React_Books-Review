@@ -12,9 +12,6 @@ const Ul = styled.ul`
   list-style-type: none;
   padding: 0;
   width: 100%;
-  display: flex;
-  justify-content: space-around;
-  flex-flow: wrap;
 
   li {
     margin-top: 20px;
@@ -24,7 +21,6 @@ const Ul = styled.ul`
     outline: none;
     border: none;
     box-shadow: 0 0 2rem 0.15rem rgba(0, 0, 255, 0.1);
-    width: 300px;
   }
 `;
 
