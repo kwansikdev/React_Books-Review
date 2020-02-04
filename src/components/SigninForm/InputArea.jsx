@@ -44,8 +44,7 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = ({ history, setToken }) => {
-  const [loading, setLoading] = useState(false);
+const InputArea = ({ history, setToken, login }) => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
@@ -54,17 +53,16 @@ const InputArea = ({ history, setToken }) => {
     const password = passwordInput.current.state.value;
 
     try {
-      // setLoading(true);
-      const response = await axios.post("https://api.marktube.tv/v1/me", {
-        email,
-        password
-      });
-      localStorage.setItem("token", response.data.token);
-      // setToken(response.data.token);
+      await login(email, password);
       history.push("/");
-      // setLoading(false);
     } catch (error) {
-      // setLoading(false);
+      if (error.response.data.error === "USER_NOT_EXIST") {
+        message.error("유저가 없습니다.");
+      } else if (error.response.data.error === "PASSWORD_NOT_MATCH") {
+        message.error("비밀번호가 틀렸습니다.");
+      } else {
+        message.error("로그인에 문제가 있습니다.");
+      }
     }
   };
 
