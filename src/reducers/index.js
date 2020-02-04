@@ -1,8 +1,12 @@
 import { combineReducers } from "redux";
 import token from "./token";
+import loading from "./loading";
+import error from "./error";
 
 const reducers = combineReducers({
-  token
+  token,
+  loading,
+  error
 });
 
 export default reducers;

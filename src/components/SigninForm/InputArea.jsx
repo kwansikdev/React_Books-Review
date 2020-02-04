@@ -1,7 +1,5 @@
-import React, { useState, createRef } from "react";
+import React, { createRef, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
-
 import styled from "styled-components";
 import { Input, Button, message } from "antd";
 
@@ -44,11 +42,11 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = ({ history, setToken, login }) => {
+const InputArea = ({ history, login, loading, loginError }) => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
-  const click = async ({ key }) => {
+  const click = async () => {
     const email = emailInput.current.state.value;
     const password = passwordInput.current.state.value;
 
@@ -56,9 +54,9 @@ const InputArea = ({ history, setToken, login }) => {
       await login(email, password);
       history.push("/");
     } catch (error) {
-      if (error.response.data.error === "USER_NOT_EXIST") {
+      if (error === "USER_NOT_EXIST") {
         message.error("유저가 없습니다.");
-      } else if (error.response.data.error === "PASSWORD_NOT_MATCH") {
+      } else if (error === "PASSWORD_NOT_MATCH") {
         message.error("비밀번호가 틀렸습니다.");
       } else {
         message.error("로그인에 문제가 있습니다.");
@@ -82,7 +80,9 @@ const InputArea = ({ history, setToken, login }) => {
         </StyledLabel>
         <StyledPassword ref={passwordInput} />
       </StyledInput>
-      <InputButton onClick={click}>SIGN IN</InputButton>
+      <InputButton onClick={click} loading={loading}>
+        SIGN IN
+      </InputButton>
     </>
   );
 };
