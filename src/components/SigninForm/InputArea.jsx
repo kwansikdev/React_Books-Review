@@ -1,7 +1,5 @@
-import React, { useState, createRef } from "react";
+import React, { createRef, useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
-
 import styled from "styled-components";
 import { Input, Button, message } from "antd";
 
@@ -44,27 +42,25 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = ({ history, setToken }) => {
-  const [loading, setLoading] = useState(false);
+const InputArea = ({ history, login, loading, loginError }) => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
-  const click = async ({ key }) => {
+  const click = async () => {
     const email = emailInput.current.state.value;
     const password = passwordInput.current.state.value;
 
     try {
-      // setLoading(true);
-      const response = await axios.post("https://api.marktube.tv/v1/me", {
-        email,
-        password
-      });
-      localStorage.setItem("token", response.data.token);
-      // setToken(response.data.token);
+      await login(email, password);
       history.push("/");
-      // setLoading(false);
     } catch (error) {
-      // setLoading(false);
+      if (error === "USER_NOT_EXIST") {
+        message.error("유저가 없습니다.");
+      } else if (error === "PASSWORD_NOT_MATCH") {
+        message.error("비밀번호가 틀렸습니다.");
+      } else {
+        message.error("로그인에 문제가 있습니다.");
+      }
     }
   };
 
@@ -84,7 +80,9 @@ const InputArea = ({ history, setToken }) => {
         </StyledLabel>
         <StyledPassword ref={passwordInput} />
       </StyledInput>
-      <InputButton onClick={click}>SIGN IN</InputButton>
+      <InputButton onClick={click} loading={loading}>
+        SIGN IN
+      </InputButton>
     </>
   );
 };

@@ -26,11 +26,11 @@ const StyledUnderline = styled.div`
   width: 100%;
 `;
 
-const SigninForm = ({ setToken }) => {
+const SigninForm = ({ login, loading, loginError }) => {
   return (
     <StyledCol>
       <Title>LOG IN. START SEARCHING</Title>
-      <InputArea setToken={setToken} />
+      <InputArea login={login} loading={loading} loginError={loginError} />
       <StyledUnderline />
       <LinkArea />
     </StyledCol>
