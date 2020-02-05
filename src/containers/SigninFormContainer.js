@@ -1,14 +1,12 @@
 import { connect } from "react-redux";
 import SigninForm from "../components/SigninForm/SigninForm";
 import Axios from "axios";
-import { setToken } from "../actions/token";
-import { startLoading, endLoading } from "../actions/loading";
-import { getError, removeError } from "../actions/error";
+import { setToken, startLoading, endLoading, getError } from "../actions";
 
 export default connect(
   state => ({
     loading: state.loading,
-    loginError: state.error
+    error: state.error
   }),
   dispatch => ({
     login: async (email, password) => {
@@ -26,7 +24,6 @@ export default connect(
         dispatch(setToken(token));
       } catch (error) {
         dispatch(getError(error.response.data.error));
-        console.log("dispatch");
         dispatch(endLoading());
         throw error.response.data.error;
       }
