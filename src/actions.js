@@ -92,7 +92,6 @@ export const setBooksThunk = token => async dispatch => {
       }
     });
     dispatch(setBooks(response.data));
-    console.log(response.data);
   } catch {}
 };
 
@@ -111,4 +110,16 @@ export const addBookThunk = (token, title, author) => async dispatch => {
       }
     );
   } catch {}
+};
+
+export const removeBooksThunk = (token, id) => async dispatch => {
+  try {
+    await axios.delete(`https://api.marktube.tv/v1/book/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

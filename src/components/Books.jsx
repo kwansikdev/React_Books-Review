@@ -20,12 +20,16 @@ const Ul = styled.ul`
   }
 `;
 
-const Books = ({ token, books, setBooks }) => {
+const Books = ({ token, books, setBooks, removeBook }) => {
   useEffect(() => {
     setBooks(token);
   }, [setBooks, token]);
 
-  console.log(books);
+  const click = async id => {
+    console.log(id);
+    await removeBook(token, id);
+  };
+
   return (
     <>
       {books ? (
@@ -39,7 +43,7 @@ const Books = ({ token, books, setBooks }) => {
                 <FaEraser />
               </Button>
               <Button>
-                <FaRegTrashAlt />
+                <FaRegTrashAlt onClick={() => click(book.bookId)} />
               </Button>
             </li>
           ))}

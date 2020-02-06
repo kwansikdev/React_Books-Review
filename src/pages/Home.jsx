@@ -10,30 +10,8 @@ const Home = props => {
   const { SubMenu } = Menu;
   const { Content, Sider } = Layout;
 
-  //
-  // const removeBook = async id => {
-  //   try {
-  //     const response = await axios.delete(
-  //       `https://api.marktube.tv/v1/book/${id}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-  //     getBooksList();
-  //   } catch (error) {}
-  // };
-
   return (
     <Layout style={{ height: "100vh" }}>
-      {/* <Nav
-        token={token}
-        logout={logout}
-        history={props.history}
-        visible={visible}
-        setVisible={setVisible}
-      /> */}
       <NavConatainers />
       <Layout>
         <Sider width={200} style={{ background: "#fff" }}>
