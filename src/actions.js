@@ -71,3 +71,44 @@ export const loginThunk = (email, password) => async dispatch => {
     throw error;
   }
 };
+
+export const logoutThunk = token => async dispatch => {
+  try {
+    await axios.delete("https://api.marktube.tv/v1/me", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    dispatch(removeToken(token));
+    localStorage.removeItem("token");
+  } catch (error) {}
+};
+
+export const setBooksThunk = token => async dispatch => {
+  try {
+    const response = await axios.get("https://api.marktube.tv/v1/book", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    dispatch(setBooks(response.data));
+    console.log(response.data);
+  } catch {}
+};
+
+export const addBookThunk = (token, title, author) => async dispatch => {
+  try {
+    await axios.post(
+      "https://api.marktube.tv/v1/book",
+      {
+        title,
+        author
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+  } catch {}
+};
