@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // token
 export const SET_TOKEN = "SET_TOKEN";
 export const REMOVE_TOKEN = "REMOVE_TOKEN";
@@ -11,12 +13,19 @@ export const removeToken = () => {
 };
 
 // error
-export const GET_ERROR = "GET_ERROR";
+export const SET_ERROR = "GET_ERROR";
+export const CLEAR_ERROR = "CLEAR_ERROR";
 
-export const getError = error => {
+export const setError = error => {
   return {
-    type: GET_ERROR,
+    type: SET_ERROR,
     error
+  };
+};
+
+export const clearError = () => {
+  return {
+    type: CLEAR_ERROR
   };
 };
 
@@ -30,4 +39,35 @@ export const startLoading = () => {
 
 export const endLoading = () => {
   return { type: END_LOADING };
+};
+
+// books
+export const SET_BOOKS = "SET_BOOKS";
+
+export const setBooks = books => {
+  return {
+    type: SET_BOOKS,
+    books
+  };
+};
+
+// Thunk
+export const loginThunk = (email, password) => async dispatch => {
+  try {
+    dispatch(clearError());
+    dispatch(startLoading());
+    const response = await axios.post("https://api.marktube.tv/v1/me", {
+      email,
+      password
+    });
+    console.log(response.data);
+    const { token } = response.data;
+    dispatch(endLoading());
+    localStorage.setItem("token", token);
+    dispatch(setToken(token));
+  } catch (error) {
+    dispatch(endLoading());
+    dispatch(setError(error));
+    throw error;
+  }
 };

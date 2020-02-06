@@ -42,26 +42,25 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = ({ history, login, loading, error }) => {
+const InputArea = ({ history, loading, error, loginThunk }) => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
   const click = async () => {
     const email = emailInput.current.state.value;
     const password = passwordInput.current.state.value;
-
     try {
-      await login(email, password);
+      await loginThunk(email, password);
       history.push("/");
-    } catch {}
+    } catch (error) {}
   };
 
   useEffect(() => {
     if (!error) return;
 
-    if (error === "USER_NOT_EXIST") {
+    if (error.response.data.error === "USER_NOT_EXIST") {
       message.error("유저가 없습니다.");
-    } else if (error === "PASSWORD_NOT_MATCH") {
+    } else if (error.response.data.error === "PASSWORD_NOT_MATCH") {
       message.error("비밀번호가 틀렸습니다.");
     } else {
       message.error("로그인에 문제가 있습니다.");
