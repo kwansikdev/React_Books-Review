@@ -1,4 +1,4 @@
-import { SET_TOKEN, REMOVE_TOKEN } from "../actions/token";
+import { SET_TOKEN, REMOVE_TOKEN } from "../actions";
 
 const initialState = null;
 

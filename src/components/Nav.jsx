@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Button, Layout } from "antd";
-import { useState } from "react";
 import InputModal from "./InputModal";
 
-const Nav = ({ token, logout, history, visible, setVisible }) => {
+const Nav = ({ token, logoutThunk, books, addBookThunk, history }) => {
   const { Header } = Layout;
+  const [visible, setVisible] = useState(false);
 
   const showModal = () => {
     if (!token) return;
     setVisible(true);
+  };
+
+  const logout = async () => {
+    await logoutThunk(token);
+    // history.push('/');
   };
 
   return (
@@ -38,6 +43,7 @@ const Nav = ({ token, logout, history, visible, setVisible }) => {
           visible={visible}
           setVisible={setVisible}
           history={history}
+          addBookThunk={addBookThunk}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import { START_LOADING, END_LOADING } from "../actions/loading";
+import { START_LOADING, END_LOADING } from "../actions";
 
 const initailState = false;
 

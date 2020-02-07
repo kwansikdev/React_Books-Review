@@ -1,5 +1,4 @@
-import React, { createRef, useCallback, useState } from "react";
-import axios from "axios";
+import React, { createRef } from "react";
 
 import styled from "styled-components";
 import { Input, Modal } from "antd";
@@ -8,34 +7,23 @@ const Label = styled.label`
   margin-bottom: 20px;
 `;
 
-const InputModal = ({ token, visible, setVisible, history }) => {
+const InputModal = ({ token, visible, setVisible, history, addBookThunk }) => {
   const authorRef = createRef();
   const titleRef = createRef();
   const messageRef = createRef();
   const urlRef = createRef();
 
-  const addBook = useCallback(async () => {
+  const addBook = async () => {
     const author = authorRef.current.state.value;
     const title = titleRef.current.state.value;
     const message = messageRef.current.state.value;
     const url = urlRef.current.state.value;
 
     try {
-      const response = await axios.post(
-        "https://api.marktube.tv/v1/book",
-        {
-          title,
-          author
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+      await addBookThunk(token, title, author);
       setVisible(false);
     } catch (error) {}
-  }, [authorRef, titleRef, messageRef, urlRef, token, setVisible]);
+  };
 
   const handleCancel = e => {
     setVisible(false);
