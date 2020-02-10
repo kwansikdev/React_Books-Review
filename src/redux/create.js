@@ -1,14 +1,15 @@
 import { createStore, applyMiddleware } from "redux";
-import reducers from "./modules/reducers";
+import reducer from "./modules/reducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 
-export default function create() {
+const create = () => {
   const token = localStorage.getItem("token");
 
   const store = createStore(
-    reducers,
+    reducer,
     {
+      books: [],
       auth: {
         token,
         loading: false,
@@ -19,4 +20,6 @@ export default function create() {
   );
 
   return store;
-}
+};
+
+export default create;

@@ -42,7 +42,7 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = ({ history, loading, error, loginThunk }) => {
+const InputArea = ({ history, loading, error, login }) => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
@@ -50,7 +50,7 @@ const InputArea = ({ history, loading, error, loginThunk }) => {
     const email = emailInput.current.state.value;
     const password = passwordInput.current.state.value;
     try {
-      await loginThunk(email, password);
+      await login(email, password);
       history.push("/");
     } catch (error) {}
   };

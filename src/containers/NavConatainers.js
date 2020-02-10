@@ -1,19 +1,16 @@
 import { connect } from "react-redux";
 
-import { logoutThunk, addBookThunk } from "../actions";
 import Nav from "../components/Nav";
+import { logout } from "../redux/modules/auth";
 
 export default connect(
   state => ({
-    token: state.token,
-    books: state.books
+    token: state.auth.token,
+    books: state.books.books
   }),
   dispatch => ({
-    logoutThunk: token => {
-      dispatch(logoutThunk(token));
-    },
-    addBookThunk: (token, title, author) => {
-      dispatch(addBookThunk(token, title, author));
+    logout: token => {
+      dispatch(logout(token));
     }
   })
 )(Nav);

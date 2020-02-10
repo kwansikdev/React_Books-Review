@@ -51,6 +51,7 @@ export const login = (email, password) => async dispatch => {
     dispatch(pending());
     const res = await UserService.login(email, password);
     const { token } = res.data;
+    console.log(res.data);
     localStorage.setItem("token", token);
     dispatch(success(token));
     dispatch("/");
