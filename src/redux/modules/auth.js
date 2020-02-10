@@ -1,4 +1,5 @@
 import UserService from "../../services/UserService";
+import { push } from "connected-react-router";
 
 // action types
 const PENDING = "books-review/auth/PENDING";
@@ -54,7 +55,7 @@ export const login = (email, password) => async dispatch => {
     console.log(res.data);
     localStorage.setItem("token", token);
     dispatch(success(token));
-    dispatch("/");
+    dispatch(push("/"));
   } catch (error) {
     dispatch(fail(error));
   }

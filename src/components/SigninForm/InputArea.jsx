@@ -2,6 +2,7 @@ import React, { createRef, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Input, Button, message } from "antd";
+import withAuth from "../../hocs/withAuth";
 
 const StyledInput = styled.div`
   margin-bottom: 20px;
@@ -42,17 +43,15 @@ const InputButton = styled(Button)`
   }
 `;
 
-const InputArea = ({ history, loading, error, login }) => {
+const InputArea = ({ loading, error, login }) => {
   const emailInput = createRef();
   const passwordInput = createRef();
 
   const click = async () => {
     const email = emailInput.current.state.value;
     const password = passwordInput.current.state.value;
-    try {
-      await login(email, password);
-      history.push("/");
-    } catch (error) {}
+
+    login(email, password);
   };
 
   useEffect(() => {
@@ -90,4 +89,4 @@ const InputArea = ({ history, loading, error, login }) => {
   );
 };
 
-export default withRouter(InputArea);
+export default InputArea;
