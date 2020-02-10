@@ -46,7 +46,9 @@ const books = (state = initialState, action) => {
 export default books;
 
 // thunk
-export const getBooks = token => async dispatch => {
+export const getBooks = () => async (dispatch, getState) => {
+  const state = getState();
+  const token = state.auth.token;
   try {
     dispatch(pending());
     const res = await BookService.getBooks(token);
