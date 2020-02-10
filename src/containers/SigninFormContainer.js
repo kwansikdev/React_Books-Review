@@ -1,15 +1,15 @@
 import { connect } from "react-redux";
 import SigninForm from "../components/SigninForm/SigninForm";
-import { loginThunk } from "../actions";
+import { login } from "../redux/modules/auth";
 
 export default connect(
   state => ({
-    loading: state.loading,
-    error: state.error
+    loading: state.auth.loading,
+    error: state.auth.error
   }),
   dispatch => ({
-    loginThunk: (email, password) => {
-      dispatch(loginThunk(email, password));
+    login: (email, password) => {
+      dispatch(login(email, password));
     }
   })
 )(SigninForm);

@@ -1,18 +1,20 @@
 import { connect } from "react-redux";
 import Books from "../components/Books";
-import { setBooksThunk, removeBooksThunk } from "../actions";
+import { deleteBook, getBooks } from "../redux/modules/books";
 
 export default connect(
   state => ({
-    token: state.token,
-    books: state.books
+    token: state.auth.token,
+    books: state.books.books,
+    loading: state.books.loading,
+    error: state.books.error
   }),
   dispatch => ({
-    setBooks: async token => {
-      dispatch(setBooksThunk(token));
+    getBooks: async token => {
+      dispatch(getBooks(token));
     },
-    removeBook: async (token, id) => {
-      dispatch(removeBooksThunk(token, id));
+    deleteBook: async (token, id) => {
+      dispatch(deleteBook(token, id));
     }
   })
 )(Books);

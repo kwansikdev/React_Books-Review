@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button, Layout } from "antd";
 import InputModal from "./InputModal";
 
-const Nav = ({ token, logoutThunk, books, addBookThunk, history }) => {
+const Nav = ({ token, logout, history }) => {
   const { Header } = Layout;
   const [visible, setVisible] = useState(false);
 
@@ -13,8 +13,8 @@ const Nav = ({ token, logoutThunk, books, addBookThunk, history }) => {
     setVisible(true);
   };
 
-  const logout = async () => {
-    await logoutThunk(token);
+  const click = async () => {
+    await logout(token);
     // history.push('/');
   };
 
@@ -30,7 +30,7 @@ const Nav = ({ token, logoutThunk, books, addBookThunk, history }) => {
           Book Add
         </Button>
         {token ? (
-          <Button onClick={logout}>로그아웃</Button>
+          <Button onClick={click}>로그아웃</Button>
         ) : (
           <Button>
             <Link to="/signin">로그인</Link>
@@ -43,7 +43,7 @@ const Nav = ({ token, logoutThunk, books, addBookThunk, history }) => {
           visible={visible}
           setVisible={setVisible}
           history={history}
-          addBookThunk={addBookThunk}
+          // addBookThunk={addBookThunk}
         />
       )}
     </>

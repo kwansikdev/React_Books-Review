@@ -20,14 +20,13 @@ const Ul = styled.ul`
   }
 `;
 
-const Books = ({ token, books, setBooks, removeBook }) => {
+const Books = ({ token, books, loading, error, getBooks, deleteBook }) => {
   useEffect(() => {
-    setBooks(token);
-  }, [setBooks, token]);
+    getBooks(token);
+  }, [getBooks, token]);
 
-  const click = async id => {
-    console.log(id);
-    await removeBook(token, id);
+  const remove = id => {
+    deleteBook(token, id);
   };
 
   return (
@@ -43,7 +42,7 @@ const Books = ({ token, books, setBooks, removeBook }) => {
                 <FaEraser />
               </Button>
               <Button>
-                <FaRegTrashAlt onClick={() => click(book.bookId)} />
+                <FaRegTrashAlt onClick={() => remove(book.bookId)} />
               </Button>
             </li>
           ))}
